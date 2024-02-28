@@ -152,7 +152,7 @@ If defined, the _optional_ `users` key must specify a list of dictionaries. Each
 | `name`               |         | A unique user account name for connectivity to the database server under which this key exists. |
 
 
-User configuration will be read from HashiCorp Vault using the path `{{ vault_base_path }}/informix`, which is expected to contain a JSON object with a top-level key corresponding to the database server name. User names should be specified within a `users` key as an object containing a single `password` key and string value. For example, given a single database server named `example-server` and user named `example-user`:
+User configuration will be read from HashiCorp Vault using the path specified by the `informix_db_vault_path` variable, which is expected to contain a JSON object with a top-level key corresponding to the database server name. User names should be specified within a `users` key as an object containing a single `password` key and string value. For example, given a single database server named `example-server` and user named `example-user`:
 
 ```json
 {
@@ -170,7 +170,7 @@ All user accounts are created as non-login accounts using `/sbin/nologin` as the
 
 ### Informix Event Alarms Configuration
 
-Event alarms configuration will be read from HashiCorp Vault using the path `{{ vault_base_path }}/informix`, which is expected to contain a JSON object with a top-level key corresponding to the database server name. An `event_alarms` key should be set to an object containing the keys `email_addresses` and `level` which are used to configure the event alarms. The value for `level` should correspond to the desired [event severity](https://www.ibm.com/docs/en/informix-servers/14.10?topic=alarms-event-alarm-parameters#ids_adr_0674__title__3) level for alarms. For example, given a single database server named `example-server` and using the email address `user@nowhere.com` for events of severity level `3` or greater:
+Event alarms configuration will be read from HashiCorp Vault using the path specified by the `informix_db_vault_path` variable, which is expected to contain a JSON object with a top-level key corresponding to the database server name. An `event_alarms` key should be set to an object containing the keys `email_addresses` and `level` which are used to configure the event alarms. The value for `level` should correspond to the desired [event severity](https://www.ibm.com/docs/en/informix-servers/14.10?topic=alarms-event-alarm-parameters#ids_adr_0674__title__3) level for alarms. For example, given a single database server named `example-server` and using the email address `user@nowhere.com` for events of severity level `3` or greater:
 
 ```json
 {
