@@ -216,7 +216,8 @@ informix_db_config:
 
 ## Reprovisioning Hosts
 
-:warning: This role is _not_ idempotent and there is a **risk of data loss** if the role is executed against hosts that contain existing dbspaces and chunks. A lock file is created in `/etc` for each database server instance provisioned by this role to provide a basic level of protection against this. These lock files are used to distinguish whether a database server was previously provisioned with this role, and the role will refuse to execute again until manual intervention is taken.
+> [!WARNING]
+> This role is _not_ idempotent and there is a **risk of data loss** if the role is executed against hosts that contain existing dbspaces and chunks. A lock file is created in `/etc` for each database server instance provisioned by this role to provide a basic level of protection against this. These lock files are used to distinguish whether a database server was previously provisioned with this role, and the role will refuse to execute again until manual intervention is taken.
 
 To provision a database server on a remote host with this role a second time:
 
