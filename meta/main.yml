@@ -1,0 +1,15 @@
+dependencies: []
+
+galaxy_info:
+  role_name: informix_db
+  namespace: companieshouse
+  author: Companies House
+  description: Provision Informix databases including server and host connectivity files, dbspaces, and chunks
+  license: MIT
+  min_ansible_version: 2.9.10
+  platforms:
+    - name: EL
+      versions:
+        - all
+  galaxy_tags:
+    - informix

@@ -1,0 +1,51 @@
+---
+
+- name: Set EC2 metadata facts
+  amazon.aws.ec2_metadata_facts:
+
+- name: Check required variables are set
+  assert:
+    that:
+      - informix_db_config is defined and informix_db_config | length > 0
+      - informix_db_config_templates_path is defined and informix_db_config_templates_path | trim | length > 0
+      - informix_db_logs_path is defined and informix_db_logs_path | trim | length > 0
+      - informix_db_server_name is defined and informix_db_server_name | trim | length > 0
+      - informix_db_vault_path is defined and inf
+    msg: "Required variable(s) empty or undefined"
+
+- name: "{{ informix_db_server_name }} : Create Informix logs directory"
+  file:
+    path: "{{ informix_db_logs_path }}"
+    owner: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    mode: "755"
+    state: directory
+
+- name: "{{ informix_db_server_name }} : Create Informix tape device directory"
+  file:
+    path: "{{ informix_db_tape_device_path }}"
+    owner: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    mode: "755"
+    state: directory
+
+- name: "{{ informix_db_server_name }} : Create rhosts config file"
+  template:
+    src: rhosts.j2
+    dest: "/home/{{ informix_db_service_user }}/.rhosts"
+    owner: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    mode: "600"
+
+- name: "{{ informix_db_server_name }} : Configure {{ informix_db_service_user }} user groups"
+  user:
+    name: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    groups: ""
+
+- name: "{{ informix_db_server_name }} : Retrieve Informix configuration from Hashicorp Vault"
+  set_fact:
+    informix_vault_config: "{{ lookup('community.hashi_vault.hashi_vault', informix_db_vault_path) | default('') }}"
+
+- name: "{{ informix_db_server_name }} : Provision server instance"
+  include_tasks: server.yml
