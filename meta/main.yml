@@ -1,6 +1,8 @@
 dependencies: []
 
 galaxy_info:
+  role_name: informix_db
+  namespace: companieshouse
   author: Companies House
   description: Provision Informix databases including server and host connectivity files, dbspaces, and chunks
   license: MIT
@@ -8,7 +10,6 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - 7
-        - 8
+        - all
   galaxy_tags:
     - informix

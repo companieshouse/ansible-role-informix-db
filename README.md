@@ -7,7 +7,7 @@ An [Ansible Galaxy](https://galaxy.ansible.com/) role for configuring IBM Inform
 
 ## Table of contents
 
-* [Assumptions][1]
+* [Role Variables][1]
 * [Informix Database Configuration][2]
   * [Server Connections Configuration][3]
     * [Default Server Connections Configuration][4]
@@ -22,7 +22,7 @@ An [Ansible Galaxy](https://galaxy.ansible.com/) role for configuring IBM Inform
 * [Example Playbook][13]
 * [License][14]
 
-[1]: #assumptions
+[1]: #role-variables
 [2]: #informix-database-configuration
 [3]: #server-connections-configuration
 [4]: #default-server-connections-configuration
@@ -37,13 +37,21 @@ An [Ansible Galaxy](https://galaxy.ansible.com/) role for configuring IBM Inform
 [13]: #example-playbook
 [14]: #license
 
-## Assumptions
+## Role Variables
 
-The following assumptions are made:
+The following role variables are required, in which case the default value will be used:
 
-* The target host(s) have **not** been previously provisioned by this role and **no** dbspaces or chunks exist
-* There are **no** active `oninit` processes on the target host(s) when this role is executed (n.b. active `oninit` processes will be owned by `root` as many Informix binaries make use of the `setuid` and `setgid` flags)
-* Each database server instance has a corresponding user account of the same name on the target host for administering that server instance
+| Name                            | Default | Description                                             |
+|----------------------------------|---------|--------------------------------------------------------|
+| `informix_db_chunk_store_path`   | `/data/informix/chunks` | The path of the directory for storing cooked files for dbspace chunks (when not using raw disks). This variable should be referenced in the [Dbspaces configuration][6] `path` option for any dbspace chunks that are to be represented using cooked files (e.g. `{{ informix_db_chunk_store_path }}/rootdbs`). |
+| `informix_db_dbdate`             | `DMY4`     | The value to be used for the `DBDATE` environment variable. |
+| `informix_db_install_path`       | `/opt/informix/14.10` | The path to the Informix installation directory. |
+| `informix_db_logs_path`          | `/var/log/informix` | The path to the directory where Informix logs will be stored. |
+| `informix_db_server_name`        |            | The name of the database server to be provisioned, for which a key exists in the `informix_db_config` dictionary with suitable configuration. |
+| `informix_db_server_name_suffix` |            | A suffix value that will be appended to the Informix server name in configuration files and environment variables to differentiate servers when using High Availability Data Replication (HDR). For example, the values `_primary` and `_secondary`. |
+| `informix_db_service_group`      | `informix` | The user to be used for ownership of configuration files and directories. |
+| `informix_db_service_user`       | `informix` | The group to be used for ownership of configuration files and directories. |
+| `informix_db_tape_device_path`   | `/db_dump` | The path to be used for the Informix tape device setting. |
 
 ## Informix Database Configuration
 
@@ -72,15 +80,6 @@ Each nested dictionary within `informix_db_config` represents an individual data
 | `logical_log_size`   | `10000` | _Optional_. The size of each logical log in kilobytes. |
 | `logical_log_number_files` | `100` | _Optional_. The number of logical log files. |
 | `event_alarms_enabled` | `false` | _Optional_. A boolean value representing whether event alarms are enabled or not. See [Informix Event Alarms Configuration][9] for more information. |
-
-Additional global configuration variables are used for the purposes detailed below:
-
-| Name                 | Default | Description                                            |
-|----------------------|---------|--------------------------------------------------------|
-| `informix_db_chunk_store_path` | `/data/informix/chunks` | _Optional_. The path of the directory for storing cooked files for dbspace chunks (when not using raw disks). This variable should be referenced in the [Dbspaces configuration][6] `path` option for any dbspace chunks that are to be represented using cooked files (e.g. `{{ informix_db_chunk_store_path }}/rootdbs`).
-| `informix_db_dbdate`           | `DMY4` | _Optional_. An optional value that will be used for the `DBDATE` environment variable. |
-| `informix_db_server_name_suffix` |         | A suffix value that will be appended to the Informix server name in configuration files and environment variables to differentiate servers when using High Availability Data Replication (HDR). For example, the values `_primary` and `_secondary`. Such configuration should be specified for individual hosts using dynamic inventory `keyed_groups`. |
-| `informix_db_tape_device_path` | `/db_dump` | _Optional_. An optional path to be used as the Informix tape device setting. |
 
 ### Server Connections Configuration
 

@@ -2,5 +2,9 @@
 
 informix_db_chunk_store_path: /data/informix/chunks
 informix_db_dbdate: DMY4
+informix_db_install_path: /opt/informix/14.10
+informix_db_logs_path: /var/log/informix
 informix_db_role_lock_file_prefix: /etc/informix-db-provisioned
+informix_db_service_group: informix
+informix_db_service_user: informix
 informix_db_tape_device_path: /db_dump

@@ -6,45 +6,46 @@
 - name: Check required variables are set
   assert:
     that:
-      - informix_service_users is defined and informix_service_users | length > 0
-      - informix_config_templates_path is defined and informix_config_templates_path | trim | length > 0
+      - informix_db_config is defined and informix_db_config | length > 0
+      - informix_db_config_templates_path is defined and informix_db_config_templates_path | trim | length > 0
+      - informix_db_logs_path is defined and informix_db_logs_path | trim | length > 0
+      - informix_db_server_name is defined and informix_db_server_name | trim | length > 0
+      - informix_db_vault_path is defined and inf
     msg: "Required variable(s) empty or undefined"
 
-- name: Create Informix logs directory
+- name: "{{ informix_db_server_name }} : Create Informix logs directory"
   file:
-    path: "{{ informix_logs_path }}"
-    owner: "{{ informix_service_user }}"
-    group: "{{ informix_service_group }}"
-    mode: 0755
+    path: "{{ informix_db_logs_path }}"
+    owner: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    mode: "755"
     state: directory
 
-- name: "{{ informix_server_name }} : Create Informix tape device directory"
+- name: "{{ informix_db_server_name }} : Create Informix tape device directory"
   file:
     path: "{{ informix_db_tape_device_path }}"
-    owner: "{{ informix_service_user }}"
-    group: "{{ informix_service_group }}"
-    mode: 0755
+    owner: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    mode: "755"
     state: directory
 
-- name: "{{ informix_server_name }} Create rhosts config file"
+- name: "{{ informix_db_server_name }} : Create rhosts config file"
   template:
     src: rhosts.j2
-    dest: "/home/{{ informix_service_user }}/.rhosts"
-    owner: "{{ informix_service_user }}"
-    group: "{{ informix_service_group }}"
-    mode: 0600
+    dest: "/home/{{ informix_db_service_user }}/.rhosts"
+    owner: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
+    mode: "600"
 
-- name: "Configure {{ informix_service_user }} user groups"
+- name: "{{ informix_db_server_name }} : Configure {{ informix_db_service_user }} user groups"
   user:
-    name: "{{ informix_service_user }}"
-    group: "{{ informix_service_group }}"
+    name: "{{ informix_db_service_user }}"
+    group: "{{ informix_db_service_group }}"
     groups: ""
 
-- name: Retrieve Informix configuration from Hashicorp Vault
+- name: "{{ informix_db_server_name }} : Retrieve Informix configuration from Hashicorp Vault"
   set_fact:
     informix_vault_config: "{{ lookup('community.hashi_vault.hashi_vault', informix_db_vault_path) | default('') }}"
 
-- include_tasks: users.yml
-  loop: "{{ informix_service_users }}"
-  loop_control:
-    loop_var: informix_server_name
+- name: "{{ informix_db_server_name }} : Provision server instance"
+  include_tasks: server.yml
