@@ -154,7 +154,7 @@
 
 - name: Create role lock file
   copy:
-    content: "{{ ansible_date_time.iso8601 }} Provisioned by 'ansible-role-informix-db'\n"
+    content: "{{ ansible_date_time.iso8601 }} Provisioned by 'ansible-role-informix-db' role\n"
     dest: "{{ role_lock_file_path }}"
     owner: root
     group: root
