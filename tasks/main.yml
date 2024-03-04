@@ -10,7 +10,7 @@
       - informix_db_config_templates_path is defined and informix_db_config_templates_path | trim | length > 0
       - informix_db_logs_path is defined and informix_db_logs_path | trim | length > 0
       - informix_db_server_name is defined and informix_db_server_name | trim | length > 0
-      - informix_db_vault_path is defined and inf
+      - informix_db_vault_path is defined and informix_db_vault_path | trim | length > 0
     msg: "Required variable(s) empty or undefined"
 
 - name: "{{ informix_db_server_name }} : Create Informix logs directory"
