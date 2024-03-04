@@ -35,6 +35,7 @@
   set_fact:
     informix_server_id: "{{ informix_server_config.server_id }}"
     informix_server_name: "{{ informix_db_server_name }}"
+    informix_server_name_suffix: "{{ informix_db_server_name_suffix }}"
     informix_server_port: "{{ informix_server_config.server_port }}"
     informix_server_aliases: "{{ informix_server_config.server_aliases | default('') }}"
     informix_root_dbspace_name: "root"
