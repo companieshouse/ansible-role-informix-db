@@ -26,7 +26,7 @@
 
 - name: "{{ informix_db_server_name }} : {{ dbspace.key }} : Enable disk initialisation for dbspace provisioning"
   lineinfile:
-    path: "{{ informix_install_path }}/etc/onconfig.{{ informix_db_server_name }}"
+    path: "{{ informix_db_install_path }}/etc/onconfig.{{ informix_db_server_name }}"
     state: present
     regexp: '^(FULL_DISK_INIT).*'
     line: '\1 1'

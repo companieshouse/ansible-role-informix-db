@@ -27,10 +27,15 @@
       - informix_db_config[informix_db_server_name].dbspaces.root.initial_chunk is defined
     msg: "Informix root dbspace configuration for server {{ informix_db_server_name }} must include an 'initial_chunk' configuration in 'informix_db_config[{{ informix_db_server_name }}].dbspaces.root'"
 
-- name: "{{ informix_db_server_name }} : Set variables for config population"
+- name: "{{ informix_db_server_name }} : Set server config variable"
   set_fact:
     informix_server_config: "{{ informix_db_config[informix_db_server_name] }}"
+
+- name: "{{ informix_db_server_name }} : Set variables for config population"
+  set_fact:
     informix_server_id: "{{ informix_server_config.server_id }}"
+    informix_server_name: "{{ informix_db_server_name }}"
+    informix_server_name_suffix: "{{ informix_db_server_name_suffix }}"
     informix_server_port: "{{ informix_server_config.server_port }}"
     informix_server_aliases: "{{ informix_server_config.server_aliases | default('') }}"
     informix_root_dbspace_name: "root"
@@ -70,19 +75,19 @@
 - name: "{{ informix_db_server_name }} : Create Informix environment file"
   template:
     src: informix.env.j2
-    dest: "{{ informix_install_path }}/etc/informix.env.{{ informix_db_server_name }}"
+    dest: "{{ informix_db_install_path }}/etc/informix.env.{{ informix_db_server_name }}"
     owner: "{{ informix_db_service_user }}"
     group: "{{ informix_db_service_group }}"
     mode: "744"
 
 - name: Set environment file path
   set_fact:
-    informix_env_file_path: "{{ informix_install_path }}/etc/informix.env.{{ informix_db_server_name }}"
+    informix_env_file_path: "{{ informix_db_install_path }}/etc/informix.env.{{ informix_db_server_name }}"
 
 - name: "{{ informix_db_server_name }} : Create Informix runtime configuration file"
   template:
     src: "{{ informix_db_config_templates_path }}/onconfig.j2"
-    dest: "{{ informix_install_path }}/etc/onconfig.{{ informix_db_server_name }}"
+    dest: "{{ informix_db_install_path }}/etc/onconfig.{{ informix_db_server_name }}"
     owner: "{{ informix_db_service_user }}"
     group: "{{ informix_db_service_group }}"
     mode: "744"
@@ -93,7 +98,7 @@
 - name: "{{ informix_db_server_name }} : Create Informix client/server connectivity configuration file"
   template:
     src: sqlhosts.j2
-    dest: "{{ informix_install_path }}/etc/sqlhosts.{{ informix_db_server_name }}"
+    dest: "{{ informix_db_install_path }}/etc/sqlhosts.{{ informix_db_server_name }}"
     owner: "{{ informix_db_service_user }}"
     group: "{{ informix_db_service_group }}"
     mode: "744"
@@ -103,7 +108,7 @@
 - name: "{{ informix_db_server_name }} : Create Informix event alarms script"
   template:
     src: "{{ informix_db_config_templates_path }}/alarmprogram.sh.j2"
-    dest: "{{ informix_install_path }}/etc/alarmprogram.sh.{{ informix_db_server_name }}"
+    dest: "{{ informix_db_install_path }}/etc/alarmprogram.sh.{{ informix_db_server_name }}"
     owner: "{{ informix_db_service_user }}"
     group: "{{ informix_db_service_group }}"
     mode: "755"
