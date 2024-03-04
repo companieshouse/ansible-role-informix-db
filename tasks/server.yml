@@ -27,9 +27,12 @@
       - informix_db_config[informix_db_server_name].dbspaces.root.initial_chunk is defined
     msg: "Informix root dbspace configuration for server {{ informix_db_server_name }} must include an 'initial_chunk' configuration in 'informix_db_config[{{ informix_db_server_name }}].dbspaces.root'"
 
-- name: "{{ informix_db_server_name }} : Set variables for config population"
+- name: "{{ informix_db_server_name }} : Set server config variable"
   set_fact:
     informix_server_config: "{{ informix_db_config[informix_db_server_name] }}"
+
+- name: "{{ informix_db_server_name }} : Set variables for config population"
+  set_fact:
     informix_server_id: "{{ informix_server_config.server_id }}"
     informix_server_port: "{{ informix_server_config.server_port }}"
     informix_server_aliases: "{{ informix_server_config.server_aliases | default('') }}"
