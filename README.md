@@ -39,9 +39,9 @@ An [Ansible Galaxy](https://galaxy.ansible.com/) role for configuring IBM Inform
 
 ## Role Variables
 
-The following role variables are required, in which case the default value will be used:
+The following role variables are required, however default values may be used where applicable:
 
-| Name                            | Default | Description                                             |
+| Name                             | Default | Description                                            |
 |----------------------------------|---------|--------------------------------------------------------|
 | `informix_db_chunk_store_path`   | `/data/informix/chunks` | The path of the directory for storing cooked files for dbspace chunks (when not using raw disks). This variable should be referenced in the [Dbspaces configuration][6] `path` option for any dbspace chunks that are to be represented using cooked files (e.g. `{{ informix_db_chunk_store_path }}/rootdbs`). |
 | `informix_db_dbdate`             | `DMY4`     | The value to be used for the `DBDATE` environment variable. |
