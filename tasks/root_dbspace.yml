@@ -37,6 +37,7 @@
   become_user: "{{ informix_db_server_name }}"
   shell: "source {{ informix_env_file_path }} && oninit -i -y"
   args:
+    chdir: "/home/{{ informix_db_server_name }}"
     executable: /bin/bash
 
 - name: "{{ informix_db_server_name }} : {{ dbspace.key }} : Provision additional root dbspace chunks"
