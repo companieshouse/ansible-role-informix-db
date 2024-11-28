@@ -1,3 +1,6 @@
+> [!WARNING]
+> This standalone Ansible Galaxy role has been deprecated and replaced with an `informix_db` role belonging to the Ansible Collection [companieshouse.middleware](https://github.com/companieshouse/ansible-collection-middleware).
+
 # Ansible Role: Informix Databases
 
 An [Ansible Galaxy](https://galaxy.ansible.com/) role for configuring IBM Informix server instances, including configuration files (i.e. `onconfig` and `sqlhosts`), as well as initialising a root dbspace and preparing additional dbspaces and chunks according to configuration provided.
